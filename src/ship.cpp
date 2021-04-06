@@ -29,6 +29,7 @@ player::player(float pos_x, float pos_y)
     origin = sprite.getOrigin();
     sprite.setPosition(sf::Vector2f(pos_x, pos_y));
     speed = 0.1;
+    cooldown = true;
 }
 
 void player::move(sf::Event event, unsigned int width, unsigned int height)
@@ -71,17 +72,18 @@ void player::move(sf::Event event, unsigned int width, unsigned int height)
 void player::fire(sf::Event event, bullet* bul)
 {
     this->position = this->sprite.getPosition();
-    if (bul->life == false && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
-        this->sprite.setTexture(this->texture_exhaust_fire);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
+        // this->sprite.setTexture(this->texture_exhaust_fire);
         bul->init(position.x - 10, position.y - 60);
-    }
-    if (bul->life == false && sf::Keyboard::isKeyPressed(sf::Keyboard::F) && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 0) {
-        this->sprite.setTexture(this->texture_fire);
+        this->cooldown = false;
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 0) {
+        // this->sprite.setTexture(this->texture_fire);
         bul->init(position.x - 10, position.y - 60);
+        this->cooldown = false;
     }
-    if (event.type == sf::Event::KeyReleased) {
-        if (event.key.code == sf::Keyboard::F && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 0) {
-            this->sprite.setTexture(this->texture);
-        }
-    }
+    // if (event.type == sf::Event::KeyReleased) {
+    // if (event.key.code == sf::Keyboard::F && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 0) {
+    // this->sprite.setTexture(this->texture);
+    // }
+    // }
 }

@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <stdbool.h>
+#include <unistd.h>
 using namespace std;
 
 #ifndef SHIP_HPP
@@ -13,7 +14,7 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
     float speed;
-    bool life;
+    bool life = false;
 
 public:
     bullet();
@@ -33,6 +34,7 @@ public:
     sf::Texture texture_exhaust_fire;
     sf::Sprite sprite;
     float speed;
+    bool cooldown;
 
 public:
     ship();
