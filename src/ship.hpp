@@ -16,6 +16,11 @@ public:
 public:
     ship();
     ~ship();
-    ship(float pos_x, float pos_y);
+};
+
+class player : public ship {
+public:
+    player(float pos_x, float pos_y);
+    void move(sf::Event event, unsigned int width, unsigned int height);
 };
 #endif
