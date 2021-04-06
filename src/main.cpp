@@ -14,7 +14,8 @@ int main()
     window.setPosition(sf::Vector2i(0, 0));
 
     player* hero_ship = new player(width / 2, height - 80);
-
+    bullet bul;
+    bul.life = false;
     while (window.isOpen()) {
 
         // check all the window's events that were triggered since the last iteration of the loop
@@ -24,15 +25,19 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        if (bul.life == true) {
+            bul.move();
+        }
         hero_ship->move(event, width, height);
+        hero_ship->fire(event, &bul);
+
         // clear the window with black color
         window.clear(sf::Color::Black);
-
-        // draw everything here...
         window.draw(hero_ship->sprite);
-        // window.draw(...);
-
-        // end the current frame
+        if (bul.life == true) {
+            window.draw(bul.sprite);
+        }
         window.display();
     }
 
