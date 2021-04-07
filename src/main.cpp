@@ -14,53 +14,27 @@ int main()
     window.setPosition(sf::Vector2i(0, 0));
 
     player* hero_ship = new player(width / 2, height - 80);
-    int countbul = 4;
-    bullet bul[countbul];
 
-    sf::Clock clock;
-    sf::Time cooldown_time = sf::seconds(0.5f);
     while (window.isOpen()) {
 
-        // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window.pollEvent(event)) {
-            // "close requested" event: we close the window
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        if (hero_ship->cooldown == false && hero_ship->count_ammo != 0) {
-            if (clock.getElapsedTime().asSeconds() > cooldown_time.asSeconds()) {
-                hero_ship->cooldown = true;
-            }
-        } else if (hero_ship->cooldown == false && hero_ship->count_ammo == 0) {
-            clock.restart();
-        }
-
-        for (int i = 0; i < countbul; i++) {
-            if (bul[i].life == true) {
-                bul[i].move();
-            }
-        }
-
-        hero_ship->move(event, width, height);
-        if (hero_ship->count_ammo != 0) {
-            for (int i = 0; i < countbul; i++) {
-                if (bul[i].life == false && hero_ship->cooldown == true) {
-                    hero_ship->fire(event, &bul[i]);
-                    clock.restart();
-                }
-            }
-        }
-        // clear the window with black color
         window.clear(sf::Color::Black);
+
+        hero_ship->check_cooldown();
+        for (int i = 0; i < hero_ship->countbul; i++) {
+            if (hero_ship->bul[i].life == true) {
+                hero_ship->bul[i].move();
+                window.draw(hero_ship->bul[i].sprite);
+            }
+            hero_ship->fire(event);
+        }
+        hero_ship->move(event, width, height);
         window.draw(hero_ship->sprite);
 
-        for (int i = 0; i < countbul; i++) {
-            if (bul[i].life == true) {
-                window.draw(bul[i].sprite);
-            }
-        }
         window.display();
     }
 

@@ -14,14 +14,15 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
     float speed;
-    bool life = false;
+    bool life;
 
 public:
     bullet();
     ~bullet();
     bullet(float pos_x, float pos_y);
     void move();
-    void init(float pos_x, float pos_y);
+    void init();
+    void shoot(float pos_x, float pos_y);
 };
 
 class ship {
@@ -32,10 +33,15 @@ public:
     sf::Texture texture_fire;
     sf::Texture texture_exhaust;
     sf::Texture texture_exhaust_fire;
-    sf::Sprite sprite;
-    float speed;
-    bool cooldown;
-    int count_ammo;
+    sf::Sprite sprite; // спрайт корабля
+    sf::Clock clock; // время пройденное с обнуления таймера
+    float speed; // скорость корабля
+    bool cooldown; // заряжено?
+    float cooldown_time; // время перезарядки
+    int count_ammo; // количество боеприпасов на корабле
+    ///////////////////////
+    int countbul; // для отрисовки
+    bullet bul[5]; // пули для отрисовки
 
 public:
     ship();
@@ -46,7 +52,8 @@ class player : public ship {
 public:
     player(float pos_x, float pos_y);
     void move(sf::Event event, unsigned int width, unsigned int height);
-    void fire(sf::Event event, bullet* bul);
+    void fire(sf::Event event);
+    void check_cooldown();
 };
 
 #endif
