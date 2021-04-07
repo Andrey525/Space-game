@@ -35,6 +35,7 @@ public:
     sf::Sprite sprite;
     float speed;
     bool cooldown;
+    int count_ammo;
 
 public:
     ship();

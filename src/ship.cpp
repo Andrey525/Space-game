@@ -30,6 +30,7 @@ player::player(float pos_x, float pos_y)
     sprite.setPosition(sf::Vector2f(pos_x, pos_y));
     speed = 0.1;
     cooldown = true;
+    count_ammo = 10;
 }
 
 void player::move(sf::Event event, unsigned int width, unsigned int height)
@@ -75,10 +76,12 @@ void player::fire(sf::Event event, bullet* bul)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
         // this->sprite.setTexture(this->texture_exhaust_fire);
         bul->init(position.x - 10, position.y - 60);
+        this->count_ammo--;
         this->cooldown = false;
     } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 0) {
         // this->sprite.setTexture(this->texture_fire);
         bul->init(position.x - 10, position.y - 60);
+        this->count_ammo--;
         this->cooldown = false;
     }
     // if (event.type == sf::Event::KeyReleased) {

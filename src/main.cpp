@@ -29,10 +29,12 @@ int main()
                 window.close();
         }
 
-        if (hero_ship->cooldown == false) {
+        if (hero_ship->cooldown == false && hero_ship->count_ammo != 0) {
             if (clock.getElapsedTime().asSeconds() > cooldown_time.asSeconds()) {
                 hero_ship->cooldown = true;
             }
+        } else if (hero_ship->cooldown == false && hero_ship->count_ammo == 0) {
+            clock.restart();
         }
 
         for (int i = 0; i < countbul; i++) {
@@ -42,11 +44,12 @@ int main()
         }
 
         hero_ship->move(event, width, height);
-
-        for (int i = 0; i < countbul; i++) {
-            if (bul[i].life == false && hero_ship->cooldown == true) {
-                hero_ship->fire(event, &bul[i]);
-                clock.restart();
+        if (hero_ship->count_ammo != 0) {
+            for (int i = 0; i < countbul; i++) {
+                if (bul[i].life == false && hero_ship->cooldown == true) {
+                    hero_ship->fire(event, &bul[i]);
+                    clock.restart();
+                }
             }
         }
         // clear the window with black color
