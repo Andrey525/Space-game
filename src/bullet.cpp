@@ -1,5 +1,4 @@
 #include "ship.hpp"
-#include <iostream>
 bullet::bullet()
 {
 }

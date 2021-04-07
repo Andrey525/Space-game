@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <iostream>
 #include <stdbool.h>
 #include <unistd.h>
 using namespace std;
@@ -54,6 +55,19 @@ public:
     void move(sf::Event event, unsigned int width, unsigned int height);
     void fire(sf::Event event);
     void check_cooldown();
+};
+
+class asteroid {
+public:
+    sf::Vector2f position;
+    sf::Vector2f origin;
+    sf::Texture texture;
+    sf::Sprite sprite;
+    float speed;
+    bool life;
+public:
+    void init(float pos_x, float pos_y);
+    void move();
 };
 
 #endif
