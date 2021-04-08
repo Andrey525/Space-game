@@ -29,19 +29,22 @@ player::player(float pos_x, float pos_y)
     if (!texture_exhaust.loadFromFile("img/spaceship2_2.png")) {
         cout << "Ошибка загрузки текстуры" << endl;
     }
+
+    buffer.loadFromFile("sound/gun.wav");
+    sound_gun.setBuffer(buffer);
     sprite.setTexture(texture);
     sprite.setOrigin(sf::Vector2f(this->texture.getSize().x / 2, this->texture.getSize().y / 2));
     origin = sprite.getOrigin();
     sprite.setPosition(sf::Vector2f(pos_x, pos_y));
-    speed = 0.1;
+    speed = 0.12;
     cooldown = true;
     count_ammo = 1000;
     cooldown_time = 0.5;
-
     countbul = 5;
     for (int i = 0; i < countbul; i++) {
         bul[i] = new bullet();
     }
+    energy = 3;
 }
 
 void player::move(sf::Event event, unsigned int width, unsigned int height)
@@ -86,12 +89,14 @@ void player::fire()
             if (this->count_ammo > 0 && this->bul[i]->life == false && this->cooldown == true) { // могу выстрелить
                 this->position = this->sprite.getPosition();
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::F)) { // стреляю в движении вверх (когда сопла работают)
-                    this->bul[i]->shoot(position.x - 10, position.y - 60);
+                    this->bul[i]->shoot(position.x, position.y - 60);
+                    this->sound_gun.play();
                     this->count_ammo--;
                     this->cooldown = false; // разряжено
                     this->clock.restart(); // начинаем заново отчет времени
                 } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == 0) { // стреляю в остальных случаях
-                    this->bul[i]->shoot(position.x - 10, position.y - 60);
+                    this->bul[i]->shoot(position.x, position.y - 60);
+                    this->sound_gun.play();
                     this->count_ammo--;
                     this->cooldown = false;
                     this->clock.restart();
@@ -101,46 +106,46 @@ void player::fire()
     }
 }
 
-enemy::enemy(float pos_x, float pos_y)
-{
-    if (!texture.loadFromFile("img/enemy1.png")) {
-        cout << "Ошибка загрузки текстуры" << endl;
-    }
+// enemy::enemy(float pos_x, float pos_y)
+// {
+//     if (!texture.loadFromFile("img/enemy1.png")) {
+//         cout << "Ошибка загрузки текстуры" << endl;
+//     }
 
-    sprite.setTexture(texture);
-    sprite.setOrigin(sf::Vector2f(this->texture.getSize().x / 2, this->texture.getSize().y / 2));
-    origin = sprite.getOrigin();
-    sprite.setPosition(sf::Vector2f(pos_x, pos_y));
-    sprite.setRotation(180.0f);
-    speed = 0.1;
-    cooldown = true;
-    count_ammo = 1000;
-    cooldown_time = 0.5;
+//     sprite.setTexture(texture);
+//     sprite.setOrigin(sf::Vector2f(this->texture.getSize().x / 2, this->texture.getSize().y / 2));
+//     origin = sprite.getOrigin();
+//     sprite.setPosition(sf::Vector2f(pos_x, pos_y));
+//     sprite.setRotation(180.0f);
+//     speed = 0.1;
+//     cooldown = true;
+//     count_ammo = 1000;
+//     cooldown_time = 0.5;
 
-    countbul = 5;
-    for (int i = 0; i < countbul; i++) {
-        bul[i] = new bullet();
-    }
-}
+//     countbul = 5;
+//     for (int i = 0; i < countbul; i++) {
+//         bul[i] = new bullet();
+//     }
+// }
 
-void enemy::move(unsigned int width, unsigned int height)
-{
-    this->position = this->sprite.getPosition();
-    if (this->position.y < (height / 2 - (this->origin.y))) {
-        this->sprite.move(sf::Vector2f(0, 0.1f + speed));
-    }
-}
+// void enemy::move(unsigned int width, unsigned int height)
+// {
+//     this->position = this->sprite.getPosition();
+//     if (this->position.y < (height / 2 - (this->origin.y))) {
+//         this->sprite.move(sf::Vector2f(0, 0.1f + speed));
+//     }
+// }
 
-void enemy::fire()
-{
+// void enemy::fire()
+// {
 
-    for (int i = 0; i < countbul; i++) {
-        if (this->count_ammo > 0 && this->bul[i]->life == false && this->cooldown == true) { // могу выстрелить
-            this->position = this->sprite.getPosition();
-            this->bul[i]->shoot(position.x, position.y + 60);
-            this->count_ammo--;
-            this->cooldown = false; // разряжено
-            this->clock.restart(); // начинаем заново отчет времени
-        }
-    }
-}
+//     for (int i = 0; i < countbul; i++) {
+//         if (this->count_ammo > 0 && this->bul[i]->life == false && this->cooldown == true) { // могу выстрелить
+//             this->position = this->sprite.getPosition();
+//             this->bul[i]->shoot(position.x, position.y + 60);
+//             this->count_ammo--;
+//             this->cooldown = false; // разряжено
+//             this->clock.restart(); // начинаем заново отчет времени
+//         }
+//     }
+// }

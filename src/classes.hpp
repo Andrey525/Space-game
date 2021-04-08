@@ -1,3 +1,4 @@
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
@@ -50,17 +51,23 @@ public:
 
 class player : public ship {
 public:
+    int energy; // грубо говоря здоровье
+
+    sf::SoundBuffer buffer;
+    sf::Sound sound_gun;
+
+public:
     player(float pos_x, float pos_y);
     void move(sf::Event event, unsigned int width, unsigned int height);
     void fire();
 };
 
-class enemy : public ship {
-public:
-    enemy(float pos_x, float pos_y);
-    void move(unsigned int width, unsigned int height);
-    void fire();
-};
+// class enemy : public ship {
+// public:
+//     enemy(float pos_x, float pos_y);
+//     void move(unsigned int width, unsigned int height);
+//     void fire();
+// };
 
 class danger {
 public:
@@ -72,6 +79,9 @@ public:
     bool life;
     sf::Clock clock_buh;
     float angel;
+
+    sf::SoundBuffer buffer;
+    sf::Sound sound_bum;
 
 public:
     danger();

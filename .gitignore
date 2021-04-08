@@ -3,6 +3,9 @@
 !.gitignore 
 !img
 !*.png
+!*.jpg
 !src
 !*.cpp
 !*.hpp
+!sound
+!*.wav

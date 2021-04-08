@@ -2,6 +2,8 @@
 
 danger::danger()
 {
+    buffer.loadFromFile("sound/bum.wav");
+    sound_bum.setBuffer(buffer);
 }
 
 void danger::move()
@@ -59,6 +61,7 @@ void asteroid::init(float pos_x, float pos_y)
 
 void asteroid::contact()
 {
+    this->sound_bum.play();
     this->texture.loadFromFile("img/bum.png");
     this->sprite.setTexture(this->texture);
     this->speed = 0;
@@ -95,6 +98,7 @@ void bomb::init(float pos_x, float pos_y)
 
 void bomb::contact()
 {
+    this->sound_bum.play();
     this->texture.loadFromFile("img/bomb_bum.png");
     this->sprite.setTexture(this->texture);
     sprite.setColor(sf::Color(255, 255, 255));

@@ -22,6 +22,10 @@ int main()
     sprite_liner.setOrigin(sf::Vector2f(texture_liner.getSize().x / 2, texture_liner.getSize().y / 2));
     sprite_liner.setPosition(sf::Vector2f(width / 2, height - sprite_liner.getOrigin().y));
 
+    // sf::Music music;
+    // music.openFromFile("sound/ship.wav");
+    // music.play();
+    int liner_energy = 10;
     player* hero_ship = new player(width / 2, height - 80);
     danger* danger[5];
     for (int i = 0; i < 3; i++) {
@@ -60,8 +64,9 @@ int main()
         window.draw(hero_ship->sprite);
         for (int i = 0; i < 5; i++) {
             danger[i]->reinit();
-            if (danger[i]->sprite.getGlobalBounds().intersects(hero_ship->sprite.getGlobalBounds()) == 1) {
+            if (danger[i]->speed != 0 && danger[i]->sprite.getGlobalBounds().intersects(hero_ship->sprite.getGlobalBounds()) == 1) {
                 danger[i]->contact();
+                --hero_ship->energy;
             }
             danger[i]->move();
             if (danger[i]->life == true) {
