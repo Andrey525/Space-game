@@ -1,21 +1,17 @@
-#include "ship.hpp"
-bullet::bullet()
-{
-}
+#include "classes.hpp"
 
 bullet::~bullet()
 {
 }
 
-bullet::bullet(float pos_x, float pos_y)
+bullet::bullet()
 {
     this->texture.loadFromFile("img/bullet.png");
     this->sprite.setTexture(this->texture);
-    this->sprite.setPosition(sf::Vector2f(pos_x, pos_y));
-    this->speed = 0.5;
-    sprite.setOrigin(sf::Vector2f(10.0f, 17.5f));
+    this->speed = 1;
+    sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
     this->origin = sprite.getOrigin();
-    this->life = true;
+    this->life = false;
 }
 
 void bullet::move()
@@ -26,16 +22,6 @@ void bullet::move()
     } else {
         this->life = false; // врезались в стенку - пуля мертва
     }
-}
-
-void bullet::init()
-{
-    this->texture.loadFromFile("img/bullet.png");
-    this->sprite.setTexture(this->texture);
-    this->speed = 1;
-    sprite.setOrigin(sf::Vector2f(10.0f, 17.5f));
-    this->origin = sprite.getOrigin();
-    this->life = false;
 }
 
 void bullet::shoot(float pos_x, float pos_y) // когда выстрелили

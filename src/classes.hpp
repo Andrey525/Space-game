@@ -31,9 +31,7 @@ public:
     sf::Vector2f position;
     sf::Vector2f origin;
     sf::Texture texture;
-    sf::Texture texture_fire;
     sf::Texture texture_exhaust;
-    sf::Texture texture_exhaust_fire;
     sf::Sprite sprite; // спрайт корабля
     sf::Clock clock; // время пройденное с обнуления таймера
     float speed; // скорость корабля
@@ -42,22 +40,29 @@ public:
     int count_ammo; // количество боеприпасов на корабле
     ///////////////////////
     int countbul; // для отрисовки
-    bullet bul[5]; // пули для отрисовки
+    bullet* bul[5]; // пули для отрисовки
 
 public:
     ship();
     ~ship();
+    void check_cooldown();
 };
 
 class player : public ship {
 public:
     player(float pos_x, float pos_y);
     void move(sf::Event event, unsigned int width, unsigned int height);
-    void fire(sf::Event event);
-    void check_cooldown();
+    void fire();
 };
 
-class asteroid {
+class enemy : public ship {
+public:
+    enemy(float pos_x, float pos_y);
+    void move(unsigned int width, unsigned int height);
+    void fire();
+};
+
+class danger {
 public:
     sf::Vector2f position;
     sf::Vector2f origin;
@@ -65,9 +70,35 @@ public:
     sf::Sprite sprite;
     float speed;
     bool life;
+    sf::Clock clock_buh;
+    float angel;
+
 public:
-    void init(float pos_x, float pos_y);
-    void move();
+    danger();
+    virtual void init(float pos_x, float pos_y) = 0;
+    virtual void move();
+    virtual void contact() = 0;
+    virtual void reinit();
+};
+
+class asteroid : public danger {
+
+public:
+    asteroid();
+    void init(float pos_x, float pos_y) override;
+    // void move();
+    void contact() override;
+    // void reinit();
+};
+
+class bomb : public danger {
+
+public:
+    bomb();
+    void init(float pos_x, float pos_y) override;
+    // void move();
+    void contact() override;
+    // void reinit();
 };
 
 #endif
