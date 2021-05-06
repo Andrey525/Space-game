@@ -8,10 +8,20 @@ bullet::bullet()
 {
     this->texture.loadFromFile("img/bullet.png");
     this->sprite.setTexture(this->texture);
-    this->speed = 1;
+    this->speed = 7;
     sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
     this->origin = sprite.getOrigin();
     this->life = false;
+}
+
+void bullet::setBullife(bool alive)
+{
+    this->life = alive;
+}
+
+bool bullet::getBullife()
+{
+    return this->life;
 }
 
 void bullet::move()
