@@ -3,9 +3,12 @@
 int liner_energy = 10;
 std::ostringstream playerEnergyString, linerEnergyString, scoreString;
 int score = 0;
+int game = 1;
+sf::Text text5;
 
 int main()
 {
+StartGame:
     sf::RenderWindow window(sf::VideoMode(1360, 700), "Space game");
     sf::Vector2u size = window.getSize();
     unsigned int width = size.x;
@@ -36,11 +39,11 @@ int main()
     sf::Font font;
     font.loadFromFile("font/stencil.ttf");
     sf::Text text, text2, text3, text4;
-    // text.setFont(font);
-    // text.setString("Approach to danger");
-    // text.setCharacterSize(64);
-    // text.setFillColor(sf::Color::White);
-    // text.setPosition(100, 100);
+    text.setFont(font);
+    text.setString("APPROACH TO DANGER");
+    text.setCharacterSize(64);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(400, 50);
     text2.setFont(font);
     text2.setCharacterSize(32);
     text2.setFillColor(sf::Color::Red);
@@ -53,6 +56,11 @@ int main()
     text4.setCharacterSize(32);
     text4.setFillColor(sf::Color::Yellow);
     text4.setPosition(0, 90);
+    text5.setFont(font);
+    text5.setString("Pause");
+    text5.setCharacterSize(64);
+    text5.setFillColor(sf::Color::White);
+    text5.setPosition(600, 150);
 
     player* hero_ship = new player(width / 2, height - 80);
     playerEnergyString << hero_ship->getenergy();
@@ -74,48 +82,79 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        if (game != -1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            usleep(200000);
+            game ^= 1;
+        }
+        if (game == -1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            usleep(200000);
+            game = 1;
+            score = 0;
+            liner_energy = 10;
+            playerEnergyString.str("");
+            linerEnergyString.str("");
+            scoreString.str("");
+            goto StartGame;
+        }
+
+        if (game == 1) {
+            hero_ship->check_cooldown();
+            for (int i = 0; i < hero_ship->countbul; i++) {
+                if (hero_ship->bul[i]->getBullife() == true) {
+                    hero_ship->bul[i]->move();
+                    for (int j = 0; j < 5; j++) {
+                        if (hero_ship->bul[i]->sprite.getGlobalBounds().intersects(danger[j]->sprite.getGlobalBounds())) {
+                            hero_ship->bul[i]->setBullife(false);
+                            danger[j]->contact();
+                            score++;
+                            scoreString.str("");
+                            scoreString << score;
+                        }
+                    }
+                }
+                hero_ship->fire();
+            }
+            hero_ship->move(event, width, height);
+            for (int i = 0; i < 5; i++) {
+                danger[i]->reinit();
+                if (danger[i]->getspeed() != 0 && danger[i]->sprite.getGlobalBounds().intersects(hero_ship->sprite.getGlobalBounds()) == 1) {
+                    danger[i]->contact();
+                    hero_ship->setenergy(hero_ship->getenergy() - danger[i]->getdamage());
+                    if (hero_ship->getenergy() <= 0) {
+                        text5.setString("GAME OVER!");
+                        text5.setPosition(540, 150);
+                        text5.setFillColor(sf::Color::Red);
+                        game = -1;
+                    }
+                }
+                danger[i]->move();
+            }
+        }
+
         text2.setString("Ship energy: " + playerEnergyString.str());
         text3.setString("Liner energy: " + linerEnergyString.str());
         text4.setString("Score: " + scoreString.str());
         window.clear(sf::Color::Black);
         window.draw(sprite_background);
         window.draw(sprite_liner);
-        // window.draw(text);
         window.draw(text2);
         window.draw(text3);
         window.draw(text4);
-        hero_ship->check_cooldown();
+        window.draw(hero_ship->sprite);
         for (int i = 0; i < hero_ship->countbul; i++) {
             if (hero_ship->bul[i]->getBullife() == true) {
-                hero_ship->bul[i]->move();
                 window.draw(hero_ship->bul[i]->sprite);
-                for (int j = 0; j < 5; j++) {
-                    if (hero_ship->bul[i]->sprite.getGlobalBounds().intersects(danger[j]->sprite.getGlobalBounds())) {
-                        hero_ship->bul[i]->setBullife(false);
-                        danger[j]->contact();
-                        score++;
-                        scoreString.str("");
-                        scoreString << score;
-                    }
-                }
             }
-            hero_ship->fire();
         }
-        hero_ship->move(event, width, height);
-        window.draw(hero_ship->sprite);
         for (int i = 0; i < 5; i++) {
-            danger[i]->reinit();
-            if (danger[i]->getspeed() != 0 && danger[i]->sprite.getGlobalBounds().intersects(hero_ship->sprite.getGlobalBounds()) == 1) {
-                danger[i]->contact();
-                hero_ship->setenergy(hero_ship->getenergy() - danger[i]->getdamage());
-                if (hero_ship->getenergy() <= 0) {
-                    cout << "Game over! Your ship is destroyed!" << endl;
-                }
-            }
-            danger[i]->move();
             if (danger[i]->getlife() == true) {
                 window.draw(danger[i]->sprite);
             }
+        }
+        if (game != 1) {
+            window.draw(text);
+            window.draw(text5);
         }
         window.display();
     }

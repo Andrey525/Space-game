@@ -9,3 +9,5 @@
 !*.hpp
 !sound
 !*.wav
+!font
+!*.ttf

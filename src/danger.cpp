@@ -2,6 +2,8 @@
 
 extern int liner_energy;
 extern std::ostringstream linerEnergyString;
+extern int game;
+extern sf::Text text5;
 
 danger::danger()
 {
@@ -57,14 +59,15 @@ void danger::move()
         this->sprite.move(sf::Vector2f(0, 1 * this->speed));
         this->sprite.rotate(angel * 0.1);
     } else if (this->getspeed() != 0) {
-        // this->life = false; // врезались в стенку
-        // this->speed = 0;
         this->contact();
         liner_energy = liner_energy - this->getdamage();
         linerEnergyString.str("");
         linerEnergyString << liner_energy;
         if (liner_energy <= 0) {
-            cout << "Game over! Liner is destroyed!" << endl;
+            text5.setString("GAME OVER!");
+            text5.setPosition(540, 150);
+            text5.setFillColor(sf::Color::Red);
+            game = -1;
         }
     }
 }
