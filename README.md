@@ -4,6 +4,10 @@
 2. Build the project - make
 3. Play - ./bin/prog
 
+Keys:
+movement - arrows (up, down, left, right)
+shooting - F
+
 P.S. 
 
 1. The game is written for Linux.
